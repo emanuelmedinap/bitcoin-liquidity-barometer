@@ -1,2 +1,2 @@
 # msbai-dwd-a2-em5844
-NYU Stern MSBAi · Dealing With Data (Prof. Ipeirotis), Assignment 2 — end-to-end data product. Cap IQ financial panel of 10 US public steel producers (company × quarter) → BigQuery ETL → quarterly revenue-prediction baseline (K-Prototype + Random Forest). Capstone-aligned.
+Assignment 2 — end-to-end data product: ~75 US public banks' 10-Q financials (SEC EDGAR) joined to FRED liquidity (M2, fed funds, yield-curve slope) + gold & bitcoin → BigQuery ETL → NII prediction + Streamlit dashboard. Does system liquidity drive bank net interest income?
