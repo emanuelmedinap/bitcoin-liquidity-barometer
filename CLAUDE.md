@@ -2,7 +2,7 @@
 
 **Purpose:** working brief and repo-as-memory for an end-to-end data product on US public banks and the monetary/liquidity cycle. Claude Code re-reads this at the start of every session. Decisions live here, not in chat.
 
-**Sources:** SEC EDGAR 10-Q financials (XBRL) · FRED (`M2SL`, `FEDFUNDS`, `T10Y2Y`) · gold (USD spot) · bitcoin (USD, public API). Joined on the fiscal quarter.
+**Sources:** SEC EDGAR 10-Q financials (XBRL) · FRED (`M2SL`, `FEDFUNDS`, `T10Y2Y`) · bitcoin (`CBBTCUSD` via FRED). **Gold is dropped** (see decision #18). Joined on the fiscal quarter.
 
 > Anything not confirmed from source is marked **TO VERIFY** and checked at pull time. Do not invent tickers or XBRL tags — unknowns stay labeled.
 
@@ -65,6 +65,7 @@ Does **system liquidity** — M2, policy rates, and the yield-curve slope — dr
 15. **Per-bank fiscal-year-end** — label `fiscal_year`/`fiscal_quarter` by each bank's detected FYE month, not the calendar month (9 non-December filers: AX/HTB/KRNY/NBN/SMBC = June; CASH/CFFN/TFSL/WAFD = Sept).
 16. **NII layer is a materialized table** (not a view) — the differencing logic can't be a simple view; `banks_clean.nii_quarterly` is rebuilt deterministically from immutable `banks_raw`. (Refines decision #5 for this layer.)
 17. **JPMorgan verified against 10-Q** — derived Q1–Q3 equal JPM's reported 3-month `InterestIncomeExpenseNet` facts exactly; Q4 reconstructed as annual − 9-month YTD, magnitudes consistent with reported NII.
+18. **Gold dropped as a barometer** — no reachable free daily USD gold series: FRED discontinued the LBMA gold family (`GOLDAMGBD228NLBM` etc.) after ICE ended the license; stooq's CSV endpoint serves a JS bot-challenge; the Nasdaq Data Link API is Incapsula-WAF-blocked from this environment; and the free Quandl `LBMA/GOLD` dataset is retired (now a paid product). **Bitcoin (`CBBTCUSD`) stands as the sole liquidity barometer** (refines decision #7). This exclusion is documented and honest — a source-availability limitation, **not a data error** — and nothing was substituted or invented.
 
 ---
 
