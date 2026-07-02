@@ -38,7 +38,7 @@ Does **system liquidity** — M2, policy rates, and the yield-curve slope — dr
 
 ## Facts (source-anchored; verify before trusting)
 
-- **Universe:** ~75 banks — KBW Bank Index + KBW Regional Banking Index constituents, SIC `6020`–`6022`. Exact ticker → CIK list **TO VERIFY** at pull.
+- **Universe:** 175 banks — KBWB (Invesco KBW Bank ETF, 24 constituents, verified) + KRE (SPDR S&P Regional Banking ETF, 161 regional constituents), 10 overlapping, deduped to 175. Holdings effectiveDate 2026-06-30. Note: the former KBW Regional Banking ETF (KBWR) has been reindexed to **Invesco FDIQ** (financial-data providers, not banks), so **KRE substitutes for the regional cross-section**. Exact ticker → CIK list **TO VERIFY** at pull.
 - **NII XBRL tags:** `InterestAndDividendIncomeOperating`, `InterestExpense`, `InterestIncomeExpenseNet` — presence **TO VERIFY** per filer; derive `NII = interest income − interest expense` when the net tag is absent.
 - **Frequency:** period-end vs quarterly-average — **decide and document** before joining to FRED.
 - **Bitcoin history:** usable from ~2014 onward.
@@ -49,7 +49,7 @@ Does **system liquidity** — M2, policy rates, and the yield-curve slope — dr
 ## Decisions (each with a one-line reason)
 
 1. **NII is the target** — it is the revenue line most directly exposed to rates and liquidity.
-2. **75-bank scope** — enough cross-section for identification while keeping the panel tractable over time.
+2. **175-bank scope** — KBWB (24) + KRE (161) deduped to 175; enough cross-section for identification while keeping the panel tractable over time.
 3. **Isolated `banks_*` datasets** — A2 stays separate from other work in the shared project.
 4. **Raw all-STRING, load-first** — land data verbatim, then type and clean in a view (no lossy parsing at ingest).
 5. **Clean in a view** — typing/cleaning is reproducible and re-runnable off immutable raw.
