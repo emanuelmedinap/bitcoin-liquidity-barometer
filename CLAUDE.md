@@ -39,10 +39,10 @@ Does **system liquidity** — M2, policy rates, and the yield-curve slope — dr
 ## Facts (source-anchored; verify before trusting)
 
 - **Universe:** 175 banks — KBWB (Invesco KBW Bank ETF, 24 constituents, verified) + KRE (SPDR S&P Regional Banking ETF, 161 regional constituents), 10 overlapping, deduped to 175. Holdings effectiveDate 2026-06-30. Note: the former KBW Regional Banking ETF (KBWR) has been reindexed to **Invesco FDIQ** (financial-data providers, not banks), so **KRE substitutes for the regional cross-section**. Exact ticker → CIK list **TO VERIFY** at pull.
-- **NII XBRL tags:** `InterestAndDividendIncomeOperating`, `InterestExpense`, `InterestIncomeExpenseNet` — presence **TO VERIFY** per filer; derive `NII = interest income − interest expense` when the net tag is absent.
+- **NII XBRL tags (VERIFIED at pull):** `InterestIncomeExpenseNet` is the **primary** target — 171/171 banks report it (100% coverage), so NII is taken directly and **no per-filer `income − expense` derivation is needed**. `InterestExpense` (169/171) and `InterestAndDividendIncomeOperating` (166/171) plus the ~110 finer component tags are **secondary** (cross-checks / decomposition only).
 - **Frequency:** period-end vs quarterly-average — **decide and document** before joining to FRED.
 - **Bitcoin history:** usable from ~2014 onward.
-- **Grain:** bank × quarter, ~48 quarters, ≈ 3,500–4,000 rows.
+- **Grain:** bank × quarter. Clean NII table `banks_clean.nii_quarterly` (`cik, ticker, period_end_date, fiscal_year, fiscal_quarter, nii`) landed with **10,247 rows across 171 banks, 2008-Q2 → 2026-Q1**. Effective universe is **171** — 4 of the 175 are excluded as FDIC-reporting (no SEC XBRL): HIFS, TOWN (no SEC CIK), OZK, PFBC (CIK but no companyfacts).
 
 ---
 
@@ -60,6 +60,11 @@ Does **system liquidity** — M2, policy rates, and the yield-curve slope — dr
 10. **No forward-fill** — flag missing values, do not impute them.
 11. **NOT a Um et al. replication** — this is an independent design, not a reproduction.
 12. **External verification** — check NII against each 10-Q and M2 against FRED directly.
+13. **Discrete quarters via YTD-differencing** — XBRL income facts are cumulative, so derive each quarter from consecutive fiscal-year-to-date facts (Q1 = 3-month; Q2/Q3 = successive YTD diffs; **Q4 = 10-K annual − 9-month YTD**), accepting only ~3-month (80–100 day) segments and preferring a directly-reported 3-month fact when present.
+14. **Restatement dedup** — one fact per `(start, end)`, keeping the latest `filed` (then highest accession), so restatements resolve to the most recent filing.
+15. **Per-bank fiscal-year-end** — label `fiscal_year`/`fiscal_quarter` by each bank's detected FYE month, not the calendar month (9 non-December filers: AX/HTB/KRNY/NBN/SMBC = June; CASH/CFFN/TFSL/WAFD = Sept).
+16. **NII layer is a materialized table** (not a view) — the differencing logic can't be a simple view; `banks_clean.nii_quarterly` is rebuilt deterministically from immutable `banks_raw`. (Refines decision #5 for this layer.)
+17. **JPMorgan verified against 10-Q** — derived Q1–Q3 equal JPM's reported 3-month `InterestIncomeExpenseNet` facts exactly; Q4 reconstructed as annual − 9-month YTD, magnitudes consistent with reported NII.
 
 ---
 
