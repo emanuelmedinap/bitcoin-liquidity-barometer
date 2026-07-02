@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>System liquidity &amp; bank Net Interest Income — report</title>
+<style>
+  :root{
+    --ink:#1a1a1a; --muted:#5c6672; --line:#e3e7ec; --bg:#ffffff;
+    --accent:#1f4e79; --panel:#f7f9fb; --warn-bg:#fff6f6; --warn-line:#e6b8b8;
+    --note-bg:#f3f7f4; --note-line:#bcd6c3;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+       line-height:1.55;font-size:17px}
+  .wrap{max-width:860px;margin:0 auto;padding:44px 22px 72px}
+  header{border-bottom:2px solid var(--line);padding-bottom:22px;margin-bottom:30px}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.08em;
+          text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+  h1{font-size:30px;line-height:1.2;margin:0 0 18px;font-weight:680;letter-spacing:-.01em}
+  .northstar{font-size:20px;line-height:1.45;margin:0;color:var(--accent);font-weight:560}
+  .method{margin:18px 0 0;color:var(--muted);font-size:15px}
+  h2{font-size:15px;font-family:var(--mono);letter-spacing:.04em;text-transform:uppercase;
+     color:var(--muted);margin:40px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  figure{margin:0}
+  .figframe{border:1px solid var(--line);border-radius:8px;padding:12px;background:var(--panel)}
+  img{display:block;width:100%;height:auto;border-radius:4px}
+  figcaption{font-size:14px;color:var(--muted);margin-top:14px}
+  figcaption .lead{color:var(--ink);font-weight:560}
+  .caplist{margin:12px 0 0;padding:0;list-style:none}
+  .caplist li{position:relative;padding:4px 0 4px 20px;border-top:1px solid var(--line);font-size:14px}
+  .caplist li:first-child{border-top:none}
+  .caplist li b{color:var(--ink)}
+  .swatch{position:absolute;left:0;top:9px;width:12px;height:12px;border-radius:3px;border:1px solid rgba(0,0,0,.15)}
+  .sw-red{background:rgba(214,39,40,.20)}
+  .sw-grey{background:rgba(127,127,127,.26)}
+  .placeholder{background:var(--note-bg);border:1px dashed var(--note-line);border-radius:8px;
+               padding:20px 22px}
+  .placeholder .tag{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+       text-transform:uppercase;color:#3f6b49;background:#e2efe6;border-radius:4px;padding:3px 8px;margin-bottom:10px}
+  .placeholder p{margin:.4em 0;color:var(--muted)}
+  .placeholder ul{margin:.5em 0 0;color:var(--muted)}
+  .facts{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:4px 20px;margin:0}
+  .facts dl{display:grid;grid-template-columns:auto 1fr;gap:0;margin:0}
+  .facts dt{font-weight:560;padding:9px 16px 9px 0;border-top:1px solid var(--line);white-space:nowrap}
+  .facts dd{margin:0;padding:9px 0;border-top:1px solid var(--line);color:var(--muted);font-variant-numeric:tabular-nums}
+  .facts dl>div{display:contents}
+  .facts dl>div:first-child dt,.facts dl>div:first-child dd{border-top:none}
+  .links{display:flex;flex-wrap:wrap;gap:12px;margin-top:4px}
+  .links a{flex:1 1 240px;text-decoration:none;color:var(--ink);border:1px solid var(--line);
+           border-radius:8px;padding:14px 16px;transition:border-color .15s,background .15s}
+  .links a:hover{border-color:var(--accent);background:var(--panel)}
+  .links .t{font-weight:600;color:var(--accent)}
+  .links .d{font-size:13px;color:var(--muted);margin-top:3px}
+  code{font-family:var(--mono);font-size:.88em;background:#eef1f4;padding:1px 5px;border-radius:4px}
+  footer{margin-top:48px;padding-top:18px;border-top:1px solid var(--line);
+         font-size:12.5px;color:var(--muted);line-height:1.5}
+  @media (max-width:560px){
+    body{font-size:16px} h1{font-size:25px} .northstar{font-size:18px}
+    .facts dl{grid-template-columns:1fr} .facts dd{padding-top:0;border-top:none}
+    .facts dt{border-top:1px solid var(--line);padding-bottom:2px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="kicker">MSBAi · Assignment 2 · US public banks &amp; the flood of money</p>
+    <h1>System liquidity vs. bank Net Interest Income</h1>
+    <p class="northstar">Does system liquidity — the money supply, policy rates, and the
+      yield-curve slope — drive US bank net interest income (NII), with bitcoin a
+      <em>barometer</em> of that liquidity rather than a cause of bank revenue?</p>
+    <p class="method"><b>Method.</b> A quarter-aligned panel of US public banks (SEC EDGAR
+      XBRL) joined to FRED liquidity series (M2, fed funds, yield slope) and bitcoin;
+      modeled in growth/changes rather than levels, with a temporal split and no imputation.</p>
+  </header>
+
+  <section>
+    <h2>The figure</h2>
+    <figure>
+      <div class="figframe">
+        <img src="analysis/liquidity_overlay.png"
+             alt="Two-panel chart: Panel A indexed levels of system NII, M2 and bitcoin on a log scale; Panel B year-over-year percent change split into a bitcoin sub-panel and an NII-and-M2 sub-panel, with FY2025 quarters and the thin-coverage window shaded.">
+      </div>
+      <figcaption>
+        <span class="lead">Quarterly, 2008-Q2 – 2026-Q1 (72 quarters).</span>
+        System NII = sum of NII across all banks per calendar quarter (SEC EDGAR XBRL,
+        <code>banks_marts.analysis_panel</code>); M2 = FRED <code>M2SL</code>, bitcoin = FRED
+        <code>CBBTCUSD</code>, both quarterly averages (<code>banks_raw.fred_series</code>).
+        Bitcoin observations begin 2014-Q4.
+        <ul class="caplist">
+          <li><b>Panel A — indexed levels.</b> Each series indexed to 100 at 2014-Q4, the
+            first quarter all three are present; log y-axis so all three read across more than
+            two orders of magnitude. Descriptive context only.</li>
+          <li><b>Panel B — year-over-year % change (the inference panel).</b> Split into two
+            sub-panels on independent scales: bitcoin alone (its swings reach ~1,200%) above,
+            NII and M2 together below, so bitcoin's volatility does not flatten the NII–M2 view.</li>
+          <li><span class="swatch sw-red"></span><b>Red shading — FY2025 quarters (6): 2024-Q3 – 2025-Q4.</b>
+            Flagged <b>UNVERIFIED</b> — figures rely on filed XBRL not yet reconciled to the published FY2025 10-K.</li>
+          <li><span class="swatch sw-grey"></span><b>Grey shading — thin bank coverage: 2008-Q2 – 2017-Q4 (39 quarters).</b>
+            Quarters where fewer than 160 banks report; the system-NII sum is composition-sensitive here, so early swings are artifacts, not economics.</li>
+        </ul>
+      </figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Reconciled figures</h2>
+    <div class="facts">
+      <dl>
+        <div><dt>Coverage span</dt><dd>72 quarters, 2008-Q2 → 2026-Q1</dd></div>
+        <div><dt>Bitcoin data begins</dt><dd>2014-Q4 (first observation) = index base quarter</dd></div>
+        <div><dt>Bank coverage</dt><dd>ramps from 16 (2008) to a stable 164–169 (~167) from 2020 on</dd></div>
+        <div><dt>Thin-coverage window</dt><dd>n_banks &lt; 160 → 2008-Q2 – 2017-Q4; stable from 2018-Q1</dd></div>
+        <div><dt>FY2025 (UNVERIFIED)</dt><dd>6 quarters, 2024-Q3 – 2025-Q4</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section>
+    <h2>Findings</h2>
+    <div class="placeholder">
+      <span class="tag">Placeholder — to be written by the author</span>
+      <p>This section is intentionally left blank. Write the interpretation of the figure here —
+        what the de-trended Panel B shows about co-movement (or its absence) between liquidity
+        and NII, and where the barometer reading holds or breaks.</p>
+      <ul>
+        <li>Read inference only from Panel B, and only over the stable-coverage period (2018 on).</li>
+        <li>Treat the grey (thin-coverage) and red (FY2025 unverified) windows with the stated caution.</li>
+        <li>Keep causal language to the rate → NII channel; bitcoin is co-movement only.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>References</h2>
+    <div class="links">
+      <a href="https://github.com/emanuelmedinap/msbai-dwd-a2-em5844/blob/main/DECISIONS.md">
+        <div class="t">DECISIONS.md →</div>
+        <div class="d">Plain-business-terms defense of the data, method, and caveats (§5.2 figure, §6 skepticism).</div>
+      </a>
+      <a href="https://github.com/emanuelmedinap/msbai-dwd-a2-em5844">
+        <div class="t">Repository →</div>
+        <div class="d">Source, SQL (<code>sql/liquidity_overlay.sql</code>), generator, and committed data snapshot.</div>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    Static report for GitHub Pages — no external calls; the only loaded asset is the local figure
+    <code>analysis/liquidity_overlay.png</code>. All labels and numbers reconcile to
+    <code>analysis/liquidity_overlay_data.csv</code> (72-quarter snapshot committed alongside the
+    figure). Sources: SEC EDGAR XBRL · FRED (M2SL, CBBTCUSD) · project BigQuery datasets
+    <code>banks_marts</code> / <code>banks_raw</code>.
+  </footer>
+
+</div>
+</body>
+</html>
