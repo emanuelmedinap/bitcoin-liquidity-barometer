@@ -56,6 +56,18 @@
   .links .t{font-weight:600;color:var(--accent)}
   .links .d{font-size:13px;color:var(--muted);margin-top:3px}
   code{font-family:var(--mono);font-size:.88em;background:#eef1f4;padding:1px 5px;border-radius:4px}
+  .disclaimer{background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:8px;
+              padding:16px 20px;font-style:italic;color:#6b4a4a;margin:0 0 18px}
+  .caveats{margin:0;padding:0;list-style:none}
+  .caveats li{padding:12px 0;border-top:1px solid var(--line);font-size:15.5px;color:var(--muted)}
+  .caveats li:first-child{border-top:none}
+  .caveats b{color:var(--ink)}
+  .subhead{font-size:14px;color:var(--muted);margin:0 0 12px}
+  .papers{margin:0 0 20px;padding:0;list-style:none}
+  .papers li{padding:11px 0;border-top:1px solid var(--line);font-size:15px}
+  .papers li:first-child{border-top:none}
+  .papers .cite{font-weight:600;color:var(--ink)}
+  .papers .gloss{color:var(--muted)}
   footer{margin-top:48px;padding-top:18px;border-top:1px solid var(--line);
          font-size:12.5px;color:var(--muted);line-height:1.5}
   @media (max-width:560px){
@@ -137,7 +149,42 @@
   </section>
 
   <section>
+    <h2>Caveats &amp; disclaimer</h2>
+    <p class="disclaimer">A caveat on where I stand: I come to this as an enthusiast of these
+      topics, not a finance professional. My conclusions should be read as an analyst's
+      exploration, not an expert's verdict.</p>
+    <ul class="caveats">
+      <li><b>FY2025 figures are unverified.</b> The most recent quarters rely on the filed XBRL
+        facts themselves; I have <b>not</b> independently re-confirmed the published FY2025 10-K.
+        Those rows are explicitly labeled UNVERIFIED.</li>
+      <li><b>The macro story is low-N.</b> There are only ~48 quarters of history; cross-bank
+        breadth is large, but the time-series evidence on liquidity is thin — treat macro
+        conclusions as suggestive, not settled.</li>
+      <li><b>Correlation is not causation.</b> Causal language is reserved for the one channel with
+        a clear mechanism — <b>interest rates → NII</b>. For bitcoin the claim is <b>co-movement
+        only</b>: a barometer of the same weather, not the cause of it.</li>
+      <li><b>The system-NII aggregate is thin-coverage before ~2018.</b> The system series is a sum
+        of NII across banks, and coverage ramps over time — the early quarters run over as few as
+        16 banks in 2008, ramping to ~167 from 2020 on. So its early year-over-year swings are composition artifacts,
+        not economics. Inference is reserved for the stable-coverage period, and the thin window is
+        shaded in the figure above.</li>
+    </ul>
+  </section>
+
+  <section>
     <h2>References</h2>
+    <p class="subhead">Anchor papers — the two studies the design leans on (DECISIONS.md §2):</p>
+    <ul class="papers">
+      <li><span class="cite">Borio, Gambacorta &amp; Hofmann (2017), <i>The influence of monetary
+        policy on bank profitability</i>.</span> <span class="gloss">A panel of 109 large
+        international banks, 1995–2012: both the level of short-term rates and the slope of the yield
+        curve raise bank profitability, operating primarily through net interest income (M2 is this
+        study's own extension, not one of their variables).</span></li>
+      <li><span class="cite">Granger &amp; Newbold (1974), <i>Spurious regressions in
+        econometrics</i>.</span> <span class="gloss">Regressing one independent random walk on
+        another routinely yields "significant" but entirely spurious results — the reason this study
+        models in changes, not levels.</span></li>
+    </ul>
     <div class="links">
       <a href="https://github.com/emanuelmedinap/msbai-dwd-a2-em5844/blob/main/DECISIONS.md">
         <div class="t">DECISIONS.md →</div>
