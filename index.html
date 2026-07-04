@@ -37,12 +37,15 @@
   .swatch{position:absolute;left:0;top:9px;width:12px;height:12px;border-radius:3px;border:1px solid rgba(0,0,0,.15)}
   .sw-red{background:rgba(214,39,40,.20)}
   .sw-grey{background:rgba(127,127,127,.26)}
-  .placeholder{background:var(--note-bg);border:1px dashed var(--note-line);border-radius:8px;
-               padding:20px 22px}
-  .placeholder .tag{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;
-       text-transform:uppercase;color:#3f6b49;background:#e2efe6;border-radius:4px;padding:3px 8px;margin-bottom:10px}
-  .placeholder p{margin:.4em 0;color:var(--muted)}
-  .placeholder ul{margin:.5em 0 0;color:var(--muted)}
+  .findings>p{margin:0 0 18px}
+  .findings>p:last-child{margin:18px 0 0;color:var(--muted)}
+  .ftree{margin:0;padding-left:22px}
+  .ftree ul{margin:6px 0;padding-left:26px}
+  .ftree li{padding:5px 0;line-height:1.5}
+  .ftree>li{list-style:disc}
+  .ftree ul>li{list-style:circle}
+  .ftree ul ul>li{list-style:square}
+  .ftree ul ul ul>li{list-style:'– ';padding-left:2px}
   .facts{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:4px 20px;margin:0}
   .facts dl{display:grid;grid-template-columns:auto 1fr;gap:0;margin:0}
   .facts dt{font-weight:560;padding:9px 16px 9px 0;border-top:1px solid var(--line);white-space:nowrap}
@@ -135,16 +138,29 @@
 
   <section>
     <h2>Findings</h2>
-    <div class="placeholder">
-      <span class="tag">Placeholder — to be written by the author</span>
-      <p>This section is intentionally left blank. Write the interpretation of the figure here —
-        what the de-trended Panel B shows about co-movement (or its absence) between liquidity
-        and NII, and where the barometer reading holds or breaks.</p>
-      <ul>
-        <li>Read inference only from Panel B, and only over the stable-coverage period (2018 on).</li>
-        <li>Treat the grey (thin-coverage) and red (FY2025 unverified) windows with the stated caution.</li>
-        <li>Keep causal language to the rate → NII channel; bitcoin is co-movement only.</li>
+    <div class="findings">
+      <p>Answering our research question: No, the money-supply dimension of system liquidity (M2) does not drive US bank NII. Across both historical episodes, 2020 to 2021 (COVID: the Fed printing money) and 2022 to 2023 (the Fed making money disappear), I found that the two series moved in opposite directions, and that both movements trace to a single common cause: the policy rate. I therefore reject the liquidity drives NII hypothesis and reserve causal language for the one channel with a documented mechanism, interest rates → NII (Borio, Gambacorta &amp; Hofmann, 2017). Nevertheless, bitcoin behaves exactly as proposed: a barometer of the M2 flood of money, tracking its direction with amplified magnitude in both episodes, a claim of co-movement, never causation. To support this conclusion as an economics enthusiast, here are the details of the analysis:</p>
+      <ul class="ftree">
+        <li>Inference window. Panel B only, 2018 Q1 → 2024 Q2 (26 quarters), read in year over year changes rather than levels, since two trending series can look related by accident (Granger &amp; Newbold, 1974).
+          <ul>
+            <li>Evidence 1:
+              <ul>
+                <li>2022 to 2023, the drain (QT). NII growth spiked ~+30 percentage points and crossed above M2, while M2 growth fell and sat at zero, the first contraction in decades. If M2 wasn't pushing NII up, what was?
+                  <ul>
+                    <li>The Fed: asset purchases stopped and rates rose aggressively, a well documented, one time historical event. Barometer check: bitcoin followed M2's direction with amplified magnitude (~-65% in the 2022 drain vs. M2's ~-4.6%).</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li>Evidence 2:
+              <ul>
+                <li>2020 to 2021, the flood (COVID). M2 growth skyrocketed to ~+30 pp (two slopes: a burst, then a plateau), while NII growth spent the entire period in negative territory (four slopes). The loudest liquidity event in the sample, yet bank interest income fell, because rates sat at zero. Barometer check: bitcoin surged with the flood, again exaggerating M2's direction.</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
       </ul>
+      <p>Both episodes are historic, first of their kind events, which is why I treat them as strong evidence of divergence, not as a settled law.</p>
     </div>
   </section>
 
