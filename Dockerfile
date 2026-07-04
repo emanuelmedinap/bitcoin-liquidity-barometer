@@ -18,6 +18,7 @@ RUN pip install -r requirements.txt
 # App code + the static bundle it reads at serve time (figure, CSV, index.html).
 # Deliberately no BigQuery client and no SQL/generator — nothing is queried at runtime.
 COPY app/ ./app/
+COPY .streamlit/ ./.streamlit/
 COPY index.html ./
 COPY analysis/liquidity_overlay.png analysis/liquidity_overlay_data.csv ./analysis/
 
