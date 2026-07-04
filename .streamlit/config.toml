@@ -1,0 +1,7 @@
+# Force a light theme so the report renders on white regardless of the
+# viewer's system (dark-mode) preference.
+[theme]
+base = "light"
+backgroundColor = "#ffffff"          # page background — white
+secondaryBackgroundColor = "#f7f9fb" # matches the report's panel tone
+textColor = "#1a1a1a"                # dark text
