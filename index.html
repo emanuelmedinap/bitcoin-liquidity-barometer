@@ -75,6 +75,8 @@
   .papers li{padding:11px 0;border-top:1px solid var(--line);font-size:15px}
   .papers li:first-child{border-top:none}
   .papers .cite{font-weight:600;color:var(--ink)}
+  .papers .cite a{color:var(--accent);text-decoration:none}
+  .papers .cite a:hover{text-decoration:underline}
   .papers .gloss{color:var(--muted)}
   footer{margin-top:48px;padding-top:18px;border-top:1px solid var(--line);
          font-size:12.5px;color:var(--muted);line-height:1.5}
@@ -200,13 +202,13 @@
     <h2>References</h2>
     <p class="subhead">Anchor papers — the two studies the design leans on (DECISIONS.md §2):</p>
     <ul class="papers">
-      <li><span class="cite">Borio, Gambacorta &amp; Hofmann (2017), <i>The influence of monetary
-        policy on bank profitability</i>.</span> <span class="gloss">A panel of 109 large
+      <li><span class="cite"><a href="https://www.bis.org/publ/work514.htm">Borio, Gambacorta &amp; Hofmann (2017), <i>The influence of monetary
+        policy on bank profitability</i></a>.</span> <span class="gloss">A panel of 109 large
         international banks, 1995–2012: both the level of short-term rates and the slope of the yield
         curve raise bank profitability, operating primarily through net interest income (M2 is this
         study's own extension, not one of their variables).</span></li>
-      <li><span class="cite">Granger &amp; Newbold (1974), <i>Spurious regressions in
-        econometrics</i>.</span> <span class="gloss">Regressing one independent random walk on
+      <li><span class="cite"><a href="https://doi.org/10.1016/0304-4076(74)90034-7">Granger &amp; Newbold (1974), <i>Spurious regressions in
+        econometrics</i></a>.</span> <span class="gloss">Regressing one independent random walk on
         another routinely yields "significant" but entirely spurious results — the reason this study
         models in changes, not levels.</span></li>
     </ul>
@@ -218,6 +220,14 @@
       <a href="https://github.com/emanuelmedinap/msbai-dwd-a2-em5844">
         <div class="t">Repository →</div>
         <div class="d">Source, SQL (<code>sql/liquidity_overlay.sql</code>), generator, and committed data snapshot.</div>
+      </a>
+      <a href="https://www.sec.gov/edgar">
+        <div class="t">SEC EDGAR →</div>
+        <div class="d">Primary source — 10-Q/10-K XBRL company facts (<code>data.sec.gov</code>).</div>
+      </a>
+      <a href="https://fred.stlouisfed.org/">
+        <div class="t">FRED →</div>
+        <div class="d">Federal Reserve macro series — <code>M2SL</code>, <code>FEDFUNDS</code>, <code>T10Y2Y</code>, <code>CBBTCUSD</code>.</div>
       </a>
     </div>
   </section>
