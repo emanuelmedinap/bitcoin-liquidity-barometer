@@ -126,8 +126,13 @@ WHERE ticker='JPM' AND period_end_date IN ('2024-12-31','2025-12-31')
 ORDER BY period_end_date;
 -- RESULT (2026-07-02), USD:
 --   2024-12-31  assets 4,002,814,000,000  deposits 2,406,032,000,000  loans 1,299,590,000,000  equity 344,758,000,000
---     [VERIFIED vs FY2024 10-K to the dollar: assets & deposits exact; loans = reported gross
---      1,323,706M - allowance ~24,116M = net 1,299,590M (total_loans basis = net-of-allowance here)]
+--     [VERIFIED vs FY2024 10-K: assets & deposits exact. loans 1,299,590M is JPM NET (after-allowance):
+--      net 1,299,590M = gross 1,323,643M - allowance 24,345M (undimensioned CECL tags, end 2024-12-31).
+--      Sourced from JPM's `FinancingReceivable...BeforeAllowanceForCreditLoss` tag, which JPM populates with
+--      the NET figure (inverted tag names: its `...AfterAllowanceForCreditLoss` tag holds the GROSS 1,323,643M).
+--      NB: total_loans basis is net pre-CECL / gross post-CECL across banks (see docs/cleaning_log.md); JPM is
+--      one of only 3 net filers (JPM, CUBI, THFF) among ~106 post-CECL FinancingReceivable-sourced banks at
+--      FY2024. total_loans/loan_deposit_ratio are not used in the reported analysis.]
 --   2025-12-31  assets 4,424,900,000,000  deposits 2,559,320,000,000  loans 1,408,905,000,000  equity 362,438,000,000
 --     [from FY2025 XBRL; published FY2025 10-K NOT independently re-verified — LABELED UNVERIFIED]
 

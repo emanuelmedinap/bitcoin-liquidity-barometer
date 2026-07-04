@@ -22,7 +22,7 @@ Conventions: **money** amounts are in **USD** (as reported in XBRL, whole dollar
 | fed_funds | FLOAT | Effective federal funds rate, quarterly avg | FRED `FEDFUNDS` | avg of monthly obs in calendar quarter | % | — |
 | yield_slope | FLOAT | 10y−2y Treasury spread, quarterly avg | FRED `T10Y2Y` | avg of available daily obs in calendar quarter | % (pp) | — |
 | bitcoin | FLOAT | Coinbase BTC/USD, quarterly avg | FRED `CBBTCUSD` | avg of available daily obs in calendar quarter | USD | starts 2015 (Q4-2014 first obs); NULL before |
-| loan_deposit_ratio | NUMERIC | total_loans / total_deposits | `features_quarterly` | level (kept) | ratio | inherits total_loans net/gross basis |
+| loan_deposit_ratio | NUMERIC | total_loans / total_deposits | `features_quarterly` | level (kept) | ratio | inherits total_loans CECL net→gross break (~2020); not comparable across it; not used in the reported analysis |
 | size_log_assets | FLOAT | ln(total_assets) | `features_quarterly` | level (kept) | ln(USD) | — |
 | equity_ratio | NUMERIC | total_equity / total_assets | `features_quarterly` | level (kept) | ratio | — |
 | nim_approx | NUMERIC | nii / total_assets | `features_quarterly` | level (kept) | ratio (quarterly) | **APPROXIMATE — uses TOTAL assets, not average EARNING assets (not pulled); not annualized** |
@@ -32,7 +32,7 @@ Conventions: **money** amounts are in **USD** (as reported in XBRL, whole dollar
 | net_income | NUMERIC | Net income (discrete quarter) | XBRL `NetIncomeLoss`→`ProfitLoss` | YTD-differenced | USD | can be ≤0 → %-change unstable |
 | provision_credit_losses | NUMERIC | Provision for credit/loan losses (discrete quarter) | XBRL `ProvisionForLoanAndLeaseLosses`→`…LoanLeaseAndOtherLosses`→`…LoanLossesExpensed` | YTD-differenced, per-quarter coalesced | USD | can be ≤0 → %-change unstable |
 | total_assets | NUMERIC | Total assets (period end) | XBRL `Assets` | instant (point-in-time) | USD | — |
-| total_loans | NUMERIC | Total loans (period end) | XBRL `LoansAndLeasesReceivableNetReportedAmount`→`…NetOfDeferredIncome`→`NotesReceivableNet`→`FinancingReceivable…BeforeAllowance` | instant | USD | **BASIS HETEROGENEOUS — mostly net-of-allowance; 6 banks (incl. JPM) use CECL FinancingReceivable tag; mixes net & gross** |
+| total_loans | NUMERIC | Total loans (period end) | XBRL `LoansAndLeasesReceivableNetReportedAmount`→`…NetOfDeferredIncome`→`NotesReceivableNet`→`FinancingReceivable…BeforeAllowance` | instant | USD | **BASIS SHIFTS AT CECL (~2020): predominantly NET pre-CECL (`LoansAndLeasesReceivableNetReportedAmount`; 135/138 at FY2016) → predominantly GROSS post-CECL (`FinancingReceivable…BeforeAllowance`; ~106 banks at FY2024, 103 gross / 3 net). A within-series net→gross break — NOT comparable across ~2020. JPM/CUBI/THFF read net despite the before-allowance tag (inverted tag names). NOT used in the reported analysis.** |
 | total_deposits | NUMERIC | Total deposits (period end) | XBRL `Deposits` | instant | USD | — |
 | total_equity | NUMERIC | Total stockholders' equity, parent (period end) | XBRL `StockholdersEquity` | instant | USD | parent-only (excludes NCI) |
 | flags | STRING | Comma-list of feature-build data flags (carried from `features_quarterly`) | derived | none | text |
