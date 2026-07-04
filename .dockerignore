@@ -1,0 +1,15 @@
+# Keep the build context small; the image copies only the app + static bundle.
+.git
+.gitignore
+**/__pycache__
+**/*.pyc
+.DS_Store
+
+# Not needed in the serving image (report is prebuilt into the static bundle).
+docs/
+sql/
+analysis/liquidity_overlay.py
+CLAUDE.md
+DECISIONS.md
+README.md
+LICENSE
