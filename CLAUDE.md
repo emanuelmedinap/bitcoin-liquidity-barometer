@@ -4,7 +4,7 @@
 
 **Sources:** SEC EDGAR 10-Q financials (XBRL) · FRED (`M2SL`, `FEDFUNDS`, `T10Y2Y`) · bitcoin (`CBBTCUSD` via FRED). **Gold is dropped** (see decision #18). Joined on the fiscal quarter.
 
-> Anything not confirmed from source is marked **TO VERIFY** and checked at pull time. Do not invent tickers or XBRL tags — unknowns stay labeled.
+> Anything not confirmed from source is marked **TO VERIFY** and checked at pull time. Do not invent tickers or XBRL tags — unknowns stay labeled. **Status: as of the landed 171-bank pull, no TO-VERIFY items remain open.**
 
 ---
 
@@ -38,7 +38,7 @@ Does **system liquidity** — M2, policy rates, and the yield-curve slope — dr
 
 ## Facts (source-anchored; verify before trusting)
 
-- **Universe:** 175 banks — KBWB (Invesco KBW Bank ETF, 24 constituents, verified) + KRE (SPDR S&P Regional Banking ETF, 161 regional constituents), 10 overlapping, deduped to 175. Holdings effectiveDate 2026-06-30. Note: the former KBW Regional Banking ETF (KBWR) has been reindexed to **Invesco FDIQ** (financial-data providers, not banks), so **KRE substitutes for the regional cross-section**. Exact ticker → CIK list **TO VERIFY** at pull.
+- **Universe:** 175 banks — KBWB (Invesco KBW Bank ETF, 24 constituents, verified) + KRE (SPDR S&P Regional Banking ETF, 161 regional constituents), 10 overlapping, deduped to 175. Holdings effectiveDate 2026-06-30. Note: the former KBW Regional Banking ETF (KBWR) has been reindexed to **Invesco FDIQ** (financial-data providers, not banks), so **KRE substitutes for the regional cross-section**. Exact ticker → CIK list **VERIFIED at pull** — 171 CIKs resolved (`company_tickers.json` → EDGAR company/full-text search), 4 FDIC-only excluded (HIFS, TOWN, OZK, PFBC; see Grain below).
 - **NII XBRL tags (VERIFIED at pull):** `InterestIncomeExpenseNet` is the **primary** target — 171/171 banks report it (100% coverage), so NII is taken directly and **no per-filer `income − expense` derivation is needed**. `InterestExpense` (169/171) and `InterestAndDividendIncomeOperating` (166/171) plus the ~110 finer component tags are **secondary** (cross-checks / decomposition only).
 - **Frequency:** period-end vs quarterly-average — **decide and document** before joining to FRED.
 - **Bitcoin history:** usable from ~2014 onward.
@@ -71,4 +71,4 @@ Does **system liquidity** — M2, policy rates, and the yield-curve slope — dr
 
 ## Working rule
 
-Mark anything not source-confirmed as **TO VERIFY**. Do not invent tickers or XBRL tags.
+Mark anything not source-confirmed as **TO VERIFY**. Do not invent tickers or XBRL tags. *(Standing rule; the A2 pull is complete — nothing currently outstanding.)*

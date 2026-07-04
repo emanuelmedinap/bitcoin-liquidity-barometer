@@ -61,7 +61,7 @@ Losing gold (§5.1) left me with one barometer. Rather than accept a thinner rea
 
 I show it as **two panels, by design:**
 
-- **Panel A — indexed levels (base quarter = 100).** System NII (summed across the 171 banks per quarter), M2, and bitcoin on one comparable scale. This is the naive view: after 2020 all three trend up together and *look* tightly linked.
+- **Panel A — indexed levels (base quarter = 100).** System NII (summed across all banks reporting each quarter), M2, and bitcoin on one comparable scale. This is the naive view: after 2020 all three trend up together and *look* tightly linked.
 - **Panel B — year-over-year % change** of the same three series. Stripping the common trend shows whether they actually move together or merely drifted up in parallel.
 
 The point is the **contrast**. Panel A looks convincing; Panel B lets the de-trended data speak. That visually demonstrates the guard in §7 — co-movement in levels is the Granger–Newbold trap — instead of just asserting it. As a bonus, Panel B surfaces the late-2025 **BTC–M2 divergence** (M2 up, bitcoin down): direct visual support for "barometer, not predictor."
@@ -79,7 +79,7 @@ The point is the **contrast**. Panel A looks convincing; Panel B lets the de-tre
 **Where you should stay skeptical:**
 
 - **FY2025 figures are unverified.** The most recent quarters rely on the filed XBRL facts themselves; I have **not** independently re-confirmed the published FY2025 10-K. Those rows are explicitly labeled UNVERIFIED.
-- **The macro story is low-N.** There are only ~48 quarters of history. Cross-bank breadth is large, but the *time-series* evidence on liquidity is thin — treat macro conclusions as suggestive, not settled.
+- **The macro story is low-N.** There are only 72 quarters of history (2008-Q2 → 2026-Q1), and fewer once a series is de-trended or bitcoin's 2015 start is imposed. Cross-bank breadth is large, but the *time-series* evidence on liquidity is thin — treat macro conclusions as suggestive, not settled.
 - **Correlation is not causation.** I reserve causal language for the one channel with a clear mechanism — **interest rates → NII**. For bitcoin I claim **co-movement only**. It is a barometer of the same weather, not the cause of it.
 - **The system-NII aggregate is thin-coverage before ~2018.** The system series is a *sum* of NII across banks, and panel coverage ramps over time — the early quarters run over as few as 16 banks in 2008, ramping to ~167 from 2020 on. So its early year-over-year swings are **composition artifacts** (banks entering the sum), not economics. Inference is reserved for the stable-coverage period, and the thin window is shaded in `analysis/liquidity_overlay.png`.
 

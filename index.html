@@ -182,8 +182,8 @@
       <li><b>FY2025 figures are unverified.</b> The most recent quarters rely on the filed XBRL
         facts themselves; I have <b>not</b> independently re-confirmed the published FY2025 10-K.
         Those rows are explicitly labeled UNVERIFIED.</li>
-      <li><b>The macro story is low-N.</b> There are only ~48 quarters of history; cross-bank
-        breadth is large, but the time-series evidence on liquidity is thin — treat macro
+      <li><b>The macro story is low-N.</b> There are only 72 quarters of history (2008-Q2 → 2026-Q1);
+        cross-bank breadth is large, but the time-series evidence on liquidity is thin — treat macro
         conclusions as suggestive, not settled.</li>
       <li><b>Correlation is not causation.</b> Causal language is reserved for the one channel with
         a clear mechanism — <b>interest rates → NII</b>. For bitcoin the claim is <b>co-movement
@@ -223,7 +223,8 @@
   </section>
 
   <footer>
-    Static report for GitHub Pages — no external calls; the only loaded asset is the local figure
+    Static report served on Cloud Run (<a href="https://liquidity-report-272987333238.us-central1.run.app">liquidity-report-272987333238.us-central1.run.app</a>)
+    — no external calls; the only loaded asset is the local figure
     <code>analysis/liquidity_overlay.png</code>. All labels and numbers reconcile to
     <code>analysis/liquidity_overlay_data.csv</code> (72-quarter snapshot committed alongside the
     figure). Sources: SEC EDGAR XBRL · FRED (M2SL, CBBTCUSD) · project BigQuery datasets

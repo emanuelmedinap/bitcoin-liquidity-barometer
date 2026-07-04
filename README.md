@@ -2,6 +2,8 @@
 
 **Bank Revenue & the Flood of Money** — an end-to-end data product on US public banks and the monetary/liquidity cycle (NYU Stern MSBAi, Assignment 2).
 
+**Live report:** https://liquidity-report-272987333238.us-central1.run.app (Streamlit on Cloud Run)
+
 ## Overview
 
 This project assembles an analysis-ready panel of US public banks' quarterly financials (SEC EDGAR XBRL) joined to Federal Reserve liquidity series and bitcoin, to examine one question: **does system liquidity — the money supply (M2), policy rates, and the yield-curve slope — drive US bank net interest income (NII), with bitcoin acting as a *barometer* of that liquidity rather than a cause of bank revenue?** The pipeline lands raw filings and macro series, types and cleans them into discrete quarterly facts, and materializes a bank × fiscal-quarter panel for analysis. For the reading of the evidence — what the figure shows and where it should not be trusted — see [`DECISIONS.md`](DECISIONS.md); this README describes the data product, not its conclusion.
@@ -41,5 +43,5 @@ The panel is **bank × fiscal quarter**: `banks_marts.analysis_panel` holds **10
 | [`analysis/liquidity_overlay.py`](analysis/liquidity_overlay.py) | Figure generator (runs the SQL under the cap, or replots offline from the CSV snapshot). |
 | [`analysis/liquidity_overlay_data.csv`](analysis/liquidity_overlay_data.csv) | Committed 72-quarter data snapshot — regenerates the figure without BigQuery. |
 | [`analysis/liquidity_overlay.png`](analysis/liquidity_overlay.png) | The two-panel figure. |
-| [`index.html`](index.html) | Self-contained one-page report (GitHub Pages), reconciled to the CSV snapshot. |
+| [`index.html`](index.html) | Self-contained one-page report — served on Cloud Run ([live](https://liquidity-report-272987333238.us-central1.run.app)); reconciled to the CSV snapshot. |
 | [`CLAUDE.md`](CLAUDE.md) | Working brief and decision log. |
