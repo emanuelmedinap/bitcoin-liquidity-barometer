@@ -1,6 +1,6 @@
 -- ============================================================================
 -- Liquidity overlay — quarterly source series for the two-panel figure
--- Project: msbai-dwd-em5844
+-- Project: YOUR_GCP_PROJECT
 -- Produces ONE row per CALENDAR quarter with the three series the figure plots:
 --   system_nii = SUM(nii) across all banks whose accrual-quarter ends in that
 --                calendar quarter (analysis_panel; calendar quarter of period_end_date)
@@ -20,7 +20,7 @@ WITH nii_q AS (
     SUM(nii)                             AS system_nii,
     LOGICAL_OR(fiscal_year = 2025)       AS has_fy2025,
     COUNT(DISTINCT cik)                  AS n_banks
-  FROM `msbai-dwd-em5844.banks_marts.analysis_panel`
+  FROM `YOUR_GCP_PROJECT.banks_marts.analysis_panel`
   WHERE nii IS NOT NULL
   GROUP BY cal_quarter
 ),
@@ -29,7 +29,7 @@ fred_q AS (
     DATE_TRUNC(date, QUARTER) AS cal_quarter,
     AVG(IF(series_id = 'M2SL'     AND value != '.', SAFE_CAST(value AS FLOAT64), NULL)) AS m2,
     AVG(IF(series_id = 'CBBTCUSD' AND value != '.', SAFE_CAST(value AS FLOAT64), NULL)) AS bitcoin
-  FROM `msbai-dwd-em5844.banks_raw.fred_series`
+  FROM `YOUR_GCP_PROJECT.banks_raw.fred_series`
   WHERE series_id IN ('M2SL', 'CBBTCUSD')
   GROUP BY cal_quarter
 )

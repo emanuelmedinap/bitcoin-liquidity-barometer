@@ -40,7 +40,7 @@ REPO = Path(__file__).resolve().parent.parent
 SQL_PATH = REPO / "sql" / "liquidity_overlay.sql"
 CSV_PATH = REPO / "analysis" / "liquidity_overlay_data.csv"
 PNG_PATH = REPO / "analysis" / "liquidity_overlay.png"
-MAX_BYTES = 214_748_364_800  # 200 GB hard cap (CLAUDE.md, non-negotiable)
+MAX_BYTES = 214_748_364_800  # 200 GB hard cap, non-negotiable
 # System NII is a SUM across banks, so its early history is distorted by rising
 # panel coverage (n_banks ramps 17 -> ~167). Quarters with materially fewer than
 # the ~167 stable count are flagged as a composition artifact on the NII/M2 panel.
@@ -109,6 +109,8 @@ def shade_thin_coverage(ax, df: pd.DataFrame) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--csv", type=Path, help="plot from a saved CSV instead of BigQuery")
+    ap.add_argument("--out", type=Path, default=PNG_PATH,
+                    help="where to write the figure (default: the committed PNG)")
     args = ap.parse_args()
 
     df = load_from_csv(args.csv) if args.csv else load_from_bq()
@@ -186,8 +188,8 @@ def main() -> None:
              fontsize=7.5, color="#444")
 
     fig.tight_layout(rect=(0, 0, 1, 0.97))
-    fig.savefig(PNG_PATH, dpi=150, bbox_inches="tight")
-    print(f"wrote figure -> {PNG_PATH}")
+    fig.savefig(args.out, dpi=150, bbox_inches="tight")
+    print(f"wrote figure -> {args.out}")
     print(f"base quarter (index=100): {base_q.date()}  |  quarters: {len(df)}  "
           f"|  FY2025 UNVERIFIED quarters: {int(df['has_fy2025'].sum())}")
 

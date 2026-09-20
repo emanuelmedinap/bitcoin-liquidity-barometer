@@ -46,7 +46,7 @@ The headline is **Net Interest Income (NII)**: what a bank earns on its assets m
 
 ### 5.1 Why gold was dropped
 
-I intended gold as a second barometer alongside bitcoin. No free, reachable daily USD gold series survived, so after four dead ends I dropped it rather than force in a substitute (CLAUDE.md decision #18):
+I intended gold as a second barometer alongside bitcoin. No free, reachable daily USD gold series survived, so after four dead ends I dropped it rather than force in a substitute (docs/cleaning_log.md, "Gold dropped"):
 
 - **FRED discontinued the LBMA gold family** (`GOLDAMGBD228NLBM` and related) after ICE ended the license — the authoritative free source was gone.
 - **stooq's CSV endpoint** serves a JavaScript bot-challenge, so the download never returns actual prices.
@@ -92,8 +92,8 @@ The point is the **contrast**. Panel A looks convincing; Panel B lets the de-tre
 ## 8. Reproducibility
 
 - **`sql/verification.sql`** — every integrity, reconciliation, and coverage check, each with its committed result. A reviewer can re-run any block or simply read the captured output.
-- **Committed cost and build config.** A hard **200 GB per-query cost cap** governs every query (documented in `CLAUDE.md`), the pipeline runs raw → clean → marts off immutable landed data, and every design decision is recorded in `CLAUDE.md` and `docs/cleaning_log.md`. Same inputs, same code, same numbers.
+- **Committed cost and build config.** A hard **200 GB per-query cost cap** governs every query (set in `analysis/liquidity_overlay.py`), the pipeline runs raw → clean → marts off immutable landed data, and every design decision is recorded in this file and `docs/cleaning_log.md`. Same inputs, same code, same numbers.
 
 ---
 
-*Companion documents: `CLAUDE.md` (decision log) · `docs/cleaning_log.md` (every exclusion and derivation) · `docs/data_dictionary.md` (column-level spec) · `sql/verification.sql` (evidence).*
+*Companion documents: `docs/cleaning_log.md` (every exclusion and derivation) · `docs/data_dictionary.md` (column-level spec) · `sql/verification.sql` (evidence).*

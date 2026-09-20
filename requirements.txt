@@ -1,4 +1,7 @@
-# Streamlit report app — static bundle only, no BigQuery client at runtime.
-streamlit>=1.40,<2
-pandas>=2.0,<3
-beautifulsoup4>=4.12,<5
+# Enough to run the tests, regenerate the figure and serve the report locally.
+# Python 3.12 or newer. No cloud SDKs: everything reads the committed snapshot.
+pandas>=2.0
+matplotlib>=3.8
+pytest>=8
+streamlit>=1.40
+beautifulsoup4>=4.12

@@ -24,7 +24,7 @@ Every removal, alignment, and derivation decision with its reason. Companion to 
 
 ## Derivation & alignment decisions
 
-- **Restatement dedup** — for each concept, one fact per `(start, end)` period, keeping the latest `filed` (tie-break: highest accession). Restatements resolve to the most recent filing. (CLAUDE.md decision #14.)
+- **Restatement dedup** — for each concept, one fact per `(start, end)` period, keeping the latest `filed` (tie-break: highest accession). Restatements resolve to the most recent filing.
 
 - **Discrete quarters via YTD-differencing** — XBRL income-statement facts are cumulative fiscal-year-to-date, so discrete quarters are derived by differencing consecutive YTD facts within each fiscal-year start-group: Q1 = 3-month fact; Q2/Q3 = successive YTD differences; **Q4 = 10-K annual − 9-month YTD**. Only ~3-month (80–100 day) segments accepted; a directly-reported 3-month fact is preferred when present. (Decision #13.)
 
@@ -40,7 +40,7 @@ Every removal, alignment, and derivation decision with its reason. Companion to 
 
 ## Sources dropped / caveats
 
-- **Gold dropped as a barometer** (CLAUDE.md decision #18). No reachable free daily USD gold series: FRED discontinued the LBMA gold family (`GOLDAMGBD228NLBM` etc.) after ICE ended the license; stooq's CSV endpoint serves a JS bot-challenge; the Nasdaq Data Link API is Incapsula-WAF-blocked from this environment; the free Quandl `LBMA/GOLD` dataset is retired (now paid). **Bitcoin (`CBBTCUSD`) stands as the sole liquidity barometer.** Documented and honest — a source-availability limitation, not a data error; nothing substituted or invented.
+- **Gold dropped as a barometer** (docs/cleaning_log.md, "Gold dropped"). No reachable free daily USD gold series: FRED discontinued the LBMA gold family (`GOLDAMGBD228NLBM` etc.) after ICE ended the license; stooq's CSV endpoint serves a JS bot-challenge; the Nasdaq Data Link API is Incapsula-WAF-blocked from this environment; the free Quandl `LBMA/GOLD` dataset is retired (now paid). **Bitcoin (`CBBTCUSD`) stands as the sole liquidity barometer.** Documented and honest — a source-availability limitation, not a data error; nothing substituted or invented.
 
 - **≤0-base %-change caveat** — `net_income_*` and `provision_credit_losses_*` percent-changes are sign-ambiguous/unstable when the base quarter is ≤ 0 (zero base → NULL via `SAFE_DIVIDE`; negative base makes % change hard to interpret). Applied as specified (they are money levels) but flagged for downstream modeling.
 

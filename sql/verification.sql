@@ -1,6 +1,6 @@
 -- ============================================================================
 -- Checkpoint B — Verification evidence
--- Project: msbai-dwd-em5844   Panel: banks_marts.analysis_panel
+-- Project: YOUR_GCP_PROJECT   Panel: banks_marts.analysis_panel
 -- Each query below is followed by its CAPTURED RESULT (run 2026-07-02, US location).
 -- All queries run under the ~/.bigqueryrc 200 GB maximum_bytes_billed cap.
 -- Re-run any block to reproduce; results are committed so reviewers need not run BQ.
@@ -13,22 +13,22 @@
 --    (cik, fiscal_year, fiscal_quarter) keys are BOTH unique (= row count).
 -- ----------------------------------------------------------------------------
 SELECT
-  (SELECT COUNT(*) FROM `msbai-dwd-em5844.banks_raw.universe`)                                                       AS universe_rows,
-  (SELECT COUNT(DISTINCT ticker) FROM `msbai-dwd-em5844.banks_raw.universe`)                                         AS universe_distinct_ticker,
-  (SELECT COUNT(*) FROM `msbai-dwd-em5844.banks_raw.companyfacts_landing`)                                           AS companyfacts_rows,
-  (SELECT COUNT(DISTINCT cik) FROM `msbai-dwd-em5844.banks_raw.companyfacts_landing`)                                AS companyfacts_distinct_cik,
-  (SELECT COUNT(*) FROM `msbai-dwd-em5844.banks_raw.etf_holdings_landing`)                                           AS etf_landing_rows,
-  (SELECT COUNT(*) FROM `msbai-dwd-em5844.banks_raw.fred_series`)                                                    AS fred_rows,
-  (SELECT COUNT(DISTINCT series_id) FROM `msbai-dwd-em5844.banks_raw.fred_series`)                                   AS fred_series_count,
-  (SELECT COUNT(*) FROM `msbai-dwd-em5844.banks_clean.nii_quarterly`)                                                AS nii_rows,
-  (SELECT COUNT(DISTINCT FORMAT('%s|%t',cik,period_end_date)) FROM `msbai-dwd-em5844.banks_clean.nii_quarterly`)     AS nii_distinct_keys,
-  (SELECT COUNT(*) FROM `msbai-dwd-em5844.banks_clean.financials_quarterly`)                                         AS financials_rows,
-  (SELECT COUNT(DISTINCT FORMAT('%s|%t',cik,period_end_date)) FROM `msbai-dwd-em5844.banks_clean.financials_quarterly`) AS financials_distinct_keys,
-  (SELECT COUNT(*) FROM `msbai-dwd-em5844.banks_marts.nii_macro_quarterly`)                                          AS macro_rows,
-  (SELECT COUNT(*) FROM `msbai-dwd-em5844.banks_marts.features_quarterly`)                                           AS features_rows,
-  (SELECT COUNT(*) FROM `msbai-dwd-em5844.banks_marts.analysis_panel`)                                               AS panel_rows,
-  (SELECT COUNT(DISTINCT FORMAT('%s|%t',cik,period_end_date)) FROM `msbai-dwd-em5844.banks_marts.analysis_panel`)    AS panel_distinct_cik_periodend,
-  (SELECT COUNT(DISTINCT FORMAT('%s|%d|%d',cik,fiscal_year,fiscal_quarter)) FROM `msbai-dwd-em5844.banks_marts.analysis_panel`) AS panel_distinct_cik_fy_fq;
+  (SELECT COUNT(*) FROM `YOUR_GCP_PROJECT.banks_raw.universe`)                                                       AS universe_rows,
+  (SELECT COUNT(DISTINCT ticker) FROM `YOUR_GCP_PROJECT.banks_raw.universe`)                                         AS universe_distinct_ticker,
+  (SELECT COUNT(*) FROM `YOUR_GCP_PROJECT.banks_raw.companyfacts_landing`)                                           AS companyfacts_rows,
+  (SELECT COUNT(DISTINCT cik) FROM `YOUR_GCP_PROJECT.banks_raw.companyfacts_landing`)                                AS companyfacts_distinct_cik,
+  (SELECT COUNT(*) FROM `YOUR_GCP_PROJECT.banks_raw.etf_holdings_landing`)                                           AS etf_landing_rows,
+  (SELECT COUNT(*) FROM `YOUR_GCP_PROJECT.banks_raw.fred_series`)                                                    AS fred_rows,
+  (SELECT COUNT(DISTINCT series_id) FROM `YOUR_GCP_PROJECT.banks_raw.fred_series`)                                   AS fred_series_count,
+  (SELECT COUNT(*) FROM `YOUR_GCP_PROJECT.banks_clean.nii_quarterly`)                                                AS nii_rows,
+  (SELECT COUNT(DISTINCT FORMAT('%s|%t',cik,period_end_date)) FROM `YOUR_GCP_PROJECT.banks_clean.nii_quarterly`)     AS nii_distinct_keys,
+  (SELECT COUNT(*) FROM `YOUR_GCP_PROJECT.banks_clean.financials_quarterly`)                                         AS financials_rows,
+  (SELECT COUNT(DISTINCT FORMAT('%s|%t',cik,period_end_date)) FROM `YOUR_GCP_PROJECT.banks_clean.financials_quarterly`) AS financials_distinct_keys,
+  (SELECT COUNT(*) FROM `YOUR_GCP_PROJECT.banks_marts.nii_macro_quarterly`)                                          AS macro_rows,
+  (SELECT COUNT(*) FROM `YOUR_GCP_PROJECT.banks_marts.features_quarterly`)                                           AS features_rows,
+  (SELECT COUNT(*) FROM `YOUR_GCP_PROJECT.banks_marts.analysis_panel`)                                               AS panel_rows,
+  (SELECT COUNT(DISTINCT FORMAT('%s|%t',cik,period_end_date)) FROM `YOUR_GCP_PROJECT.banks_marts.analysis_panel`)    AS panel_distinct_cik_periodend,
+  (SELECT COUNT(DISTINCT FORMAT('%s|%d|%d',cik,fiscal_year,fiscal_quarter)) FROM `YOUR_GCP_PROJECT.banks_marts.analysis_panel`) AS panel_distinct_cik_fy_fq;
 -- RESULT (2026-07-02):
 --   universe_rows=175            universe_distinct_ticker=175        (unique)
 --   companyfacts_rows=171        companyfacts_distinct_cik=171       (unique)
@@ -47,10 +47,10 @@ SELECT
 -- ----------------------------------------------------------------------------
 SELECT
   (SELECT COUNT(*) FROM (
-     SELECT 1 FROM `msbai-dwd-em5844.banks_marts.analysis_panel`
+     SELECT 1 FROM `YOUR_GCP_PROJECT.banks_marts.analysis_panel`
      GROUP BY cik, period_end_date HAVING COUNT(*) > 1))               AS dup_cik_periodend_groups,
   (SELECT COUNT(*) FROM (
-     SELECT 1 FROM `msbai-dwd-em5844.banks_marts.analysis_panel`
+     SELECT 1 FROM `YOUR_GCP_PROJECT.banks_marts.analysis_panel`
      GROUP BY cik, fiscal_year, fiscal_quarter HAVING COUNT(*) > 1))   AS dup_cik_fy_fq_groups;
 -- RESULT (2026-07-02): dup_cik_periodend_groups=0, dup_cik_fy_fq_groups=0.  PASS.
 
@@ -68,7 +68,7 @@ SELECT
   COUNTIF(yoy_prior_status='present') AS yoy_present,
   COUNTIF(yoy_prior_status='start')   AS yoy_start,
   COUNTIF(yoy_prior_status='gap')     AS yoy_gap
-FROM `msbai-dwd-em5844.banks_marts.analysis_panel`;
+FROM `YOUR_GCP_PROJECT.banks_marts.analysis_panel`;
 -- RESULT (2026-07-02):
 --   QoQ: present=10056  start=171  gap=20      (start=171 = one earliest quarter per bank)
 --   YoY: present=9553   start=673  gap=21
@@ -88,7 +88,7 @@ SELECT
     COUNTIF(interest_income IS NOT NULL AND interest_expense IS NOT NULL AND nii IS NOT NULL
             AND ABS((interest_income - interest_expense) - nii) <= 1000000),
     COUNTIF(interest_income IS NOT NULL AND interest_expense IS NOT NULL AND nii IS NOT NULL)),2) AS pct_match_within_1M
-FROM `msbai-dwd-em5844.banks_marts.analysis_panel`;
+FROM `YOUR_GCP_PROJECT.banks_marts.analysis_panel`;
 -- RESULT (2026-07-02): testable_rows=10072, match_within_1M=10018, pct_match_within_1M=99.46%.
 --   PASS (near-universal). The 54 residual rows (0.54%) are filers whose interest-income
 --   tag base differs slightly from the NII income base; NII itself is taken from the
@@ -101,7 +101,7 @@ FROM `msbai-dwd-em5844.banks_marts.analysis_panel`;
 --    reported 3-month InterestIncomeExpenseNet facts; Q4 = 10-K annual - 9-mo YTD.
 -- ----------------------------------------------------------------------------
 SELECT period_end_date, fiscal_year, fiscal_quarter, nii
-FROM `msbai-dwd-em5844.banks_marts.analysis_panel`
+FROM `YOUR_GCP_PROJECT.banks_marts.analysis_panel`
 WHERE ticker='JPM' AND period_end_date >= '2024-09-30'
 ORDER BY period_end_date;
 -- RESULT (2026-07-02), nii (USD):
@@ -121,7 +121,7 @@ ORDER BY period_end_date;
 --    (stocks are point-in-time XBRL facts = the reported balance-sheet lines).
 -- ----------------------------------------------------------------------------
 SELECT period_end_date, total_assets, total_deposits, total_loans, total_equity
-FROM `msbai-dwd-em5844.banks_marts.analysis_panel`
+FROM `YOUR_GCP_PROJECT.banks_marts.analysis_panel`
 WHERE ticker='JPM' AND period_end_date IN ('2024-12-31','2025-12-31')
 ORDER BY period_end_date;
 -- RESULT (2026-07-02), USD:
@@ -143,7 +143,7 @@ ORDER BY period_end_date;
 WITH r AS (
   SELECT series_id, value, date,
          ROW_NUMBER() OVER (PARTITION BY series_id ORDER BY date DESC) rn
-  FROM `msbai-dwd-em5844.banks_raw.fred_series` WHERE value != '.')
+  FROM `YOUR_GCP_PROJECT.banks_raw.fred_series` WHERE value != '.')
 SELECT series_id, value AS latest_value, date AS latest_date FROM r WHERE rn=1 ORDER BY series_id;
 -- RESULT (2026-07-02):
 --   M2SL     23052.3   2026-05-01   [matches FRED published latest M2 (monthly, $B)]      VERIFIED
@@ -159,7 +159,7 @@ SELECT
   COUNTIF(nii_qoq IS NOT NULL) AS nii_qoq, COUNTIF(nii_yoy IS NOT NULL) AS nii_yoy,
   COUNTIF(bitcoin_qoq IS NOT NULL) AS bitcoin_qoq, COUNTIF(bitcoin_yoy IS NOT NULL) AS bitcoin_yoy,
   COUNTIF(fed_funds_qoq_chg IS NOT NULL) AS fed_funds_qoq_chg, COUNTIF(yield_slope_yoy_chg IS NOT NULL) AS yield_slope_yoy_chg
-FROM `msbai-dwd-em5844.banks_marts.analysis_panel`;
+FROM `YOUR_GCP_PROJECT.banks_marts.analysis_panel`;
 -- RESULT (2026-07-02): nii_qoq=10055 nii_yoy=9552 bitcoin_qoq=7286 bitcoin_yoy=6781
 --   fed_funds_qoq_chg=10056 yield_slope_yoy_chg=9553
 --   (rate/macro transforms hit the present-lag ceiling exactly; bitcoin capped by 2015 start.)

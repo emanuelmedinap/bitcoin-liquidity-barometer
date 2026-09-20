@@ -1,47 +1,136 @@
-# msbai-dwd-a2-em5844
+# Bank Liquidity Barometer
 
-**Bank Revenue & the Flood of Money** — an end-to-end data product on US public banks and the monetary/liquidity cycle (NYU Stern MSBAi, Assignment 2).
+**The problem.** When the Fed floods the system with money, do banks earn more
+from lending? It is the kind of claim that gets repeated on trading desks and
+rarely tested against filed numbers. And if the money supply is what matters,
+is there a live gauge for it that moves before the quarterly filings arrive?
 
-**Live report:** https://liquidity-report-272987333238.us-central1.run.app (Streamlit on Cloud Run)
+**The decision.** Build the panel from primary sources a reviewer can pull
+themselves: 171 US public banks' quarterly filings from SEC EDGAR, liquidity
+series from FRED, bitcoin as the candidate barometer. Model changes, never
+levels, because two trending series look related by accident. Impute nothing.
+When no free gold series survived four attempts, drop gold and say so rather
+than substitute.
 
-## Overview
+**The result.** No. Across both episodes in the sample, the 2020-21 flood and
+the 2022-23 drain, M2 and bank net interest income moved in opposite directions,
+and both trace to the policy rate. The one causal channel with a mechanism is
+rates, not money supply. Bitcoin did behave as a barometer: it followed M2's
+direction with amplified magnitude in both episodes (about -65% against M2's
+-4.6% in the 2022 drain). Co-movement, never causation.
 
-This project assembles an analysis-ready panel of US public banks' quarterly financials (SEC EDGAR XBRL) joined to Federal Reserve liquidity series and bitcoin, to examine one question: **does system liquidity — the money supply (M2), policy rates, and the yield-curve slope — drive US bank net interest income (NII), with bitcoin acting as a *barometer* of that liquidity rather than a cause of bank revenue?** The pipeline lands raw filings and macro series, types and cleans them into discrete quarterly facts, and materializes a bank × fiscal-quarter panel for analysis. For the reading of the evidence — what the figure shows and where it should not be trusted — see [`DECISIONS.md`](DECISIONS.md); this README describes the data product, not its conclusion.
+**Built by** Emanuel Medina Pinzon, individual coursework for *Dealing With Data*
+(Prof. Panos Ipeirotis), NYU Stern MSBAi, July 2026.
 
-## Scope
+![Three panels: indexed levels of system NII, M2 and bitcoin on a log scale; bitcoin year-over-year change; NII and M2 year-over-year change. Thin bank coverage before 2018 shaded grey, unverified FY2025 quarters shaded red](analysis/liquidity_overlay.png)
 
-**Effective universe: 171 US public banks.** Built from two ETFs and deduped:
+**Run the checks (Python 3.12+):** `pip install -r requirements.txt && pytest` · **Regenerate the figure:** `python analysis/liquidity_overlay.py --csv analysis/liquidity_overlay_data.csv --out /tmp/overlay.png`
 
-- **KBWB** (Invesco KBW Bank ETF) — 24 constituents
-- **KRE** (SPDR S&P Regional Banking ETF) — 161 regional equity constituents
-- 10 overlap → **175 distinct banks**
-- **4 excluded** as FDIC-reporting filers with no SEC XBRL (HIFS, TOWN, OZK, PFBC) → **171** in the financials/NII layers.
+---
 
-The panel is **bank × fiscal quarter**: `banks_marts.analysis_panel` holds **10,247 rows** across the 171 banks, 2008-Q2 → 2026-Q1.
+## How to read the figure
 
-## Data sources & APIs
+Panel A is the trap: indexed to 100 at 2014-Q4, all three series trend up
+together after 2020 and look linked. Panel B strips the common trend by taking
+year-over-year change, and that is the only panel inference is drawn from. The
+grey band marks quarters where fewer than 160 banks report, so the system-NII sum
+is a composition artifact, not economics. The red band marks the six FY2025
+quarters whose filings were not independently reconciled.
 
-- **SEC EDGAR — companyfacts (XBRL).** Quarterly and annual financials from 10-Q/10-K filings, pulled per-CIK from the companyfacts API. Requests require a **descriptive `User-Agent`** header per SEC fair-access policy.
-- **FRED API.** Four series: **`M2SL`** (M2 money stock), **`FEDFUNDS`** (effective federal funds rate), **`T10Y2Y`** (10y−2y Treasury spread), and **`CBBTCUSD`** (Coinbase BTC/USD — bitcoin, the liquidity barometer).
-- **Gold — dropped.** No reachable free daily USD gold series survived; bitcoin stands as the sole barometer. See [`DECISIONS.md` §5.1](DECISIONS.md) for the four dead-end sources and rationale.
+The full reading of the evidence, in plain business terms, with every place a
+careful reader should stay skeptical, is in [`DECISIONS.md`](DECISIONS.md).
+The one-page report as it was delivered is [`index.html`](index.html).
 
-## Storage & architecture
+<img src="docs/img/report-findings.jpg" alt="The findings section of the delivered report, as served before the deployment was retired" width="70%">
 
-- **GCP project:** `msbai-dwd-em5844`.
-- **BigQuery pipeline:** `banks_raw` (verbatim landing, all-STRING) → `banks_clean` (typed, cleaned, discrete quarterly facts) → `banks_marts` (analysis-ready). The analysis-ready table is **`banks_marts.analysis_panel`**.
-- **Cost guard:** a hard **200 GB per-query cap** (`maximum_bytes_billed = 214748364800`) enforced on every query, via `~/.bigqueryrc` for the `bq` CLI and set explicitly on each Python/programmatic job.
+## The data product
 
-## Reproducibility
+```
+KBWB + KRE ETF holdings          175 distinct tickers, 4 excluded (no SEC XBRL) -> 171 banks
+SEC EDGAR companyfacts (XBRL)    10-Q / 10-K facts per CIK, landed verbatim as STRING
+FRED                             M2SL, FEDFUNDS, T10Y2Y, CBBTCUSD
+  |
+banks_raw      verbatim landing, nothing typed, nothing dropped
+banks_clean    typed, restatements resolved to the latest filing, discrete quarterly facts
+banks_marts    bank x fiscal-quarter panel: 10,247 rows, 171 banks, 2008-Q2 to 2026-Q1, 55 columns
+  |
+analysis/liquidity_overlay_data.csv   72-quarter system snapshot, committed
+analysis/liquidity_overlay.py         the figure, from BigQuery or from the CSV
+```
 
-| Path | What it is |
+| file | why |
 |---|---|
-| [`DECISIONS.md`](DECISIONS.md) | Executive defense of the data, method, and caveats; the reading of the evidence. |
-| [`docs/cleaning_log.md`](docs/cleaning_log.md) | Every exclusion, derivation, and alignment decision with its reason. |
-| [`docs/data_dictionary.md`](docs/data_dictionary.md) | Column-level spec for `banks_marts.analysis_panel` (55 columns). |
-| [`sql/verification.sql`](sql/verification.sql) | Integrity, reconciliation, and coverage checks — each with its committed result. |
-| [`sql/liquidity_overlay.sql`](sql/liquidity_overlay.sql) | Query behind the liquidity-overlay figure (quarter-aligned system NII + M2 + bitcoin). |
-| [`analysis/liquidity_overlay.py`](analysis/liquidity_overlay.py) | Figure generator (runs the SQL under the cap, or replots offline from the CSV snapshot). |
-| [`analysis/liquidity_overlay_data.csv`](analysis/liquidity_overlay_data.csv) | Committed 72-quarter data snapshot — regenerates the figure without BigQuery. |
-| [`analysis/liquidity_overlay.png`](analysis/liquidity_overlay.png) | The two-panel figure. |
-| [`index.html`](index.html) | Self-contained one-page report — served on Cloud Run ([live](https://liquidity-report-272987333238.us-central1.run.app)); reconciled to the CSV snapshot. |
-| [`CLAUDE.md`](CLAUDE.md) | Working brief and decision log. |
+| [`DECISIONS.md`](DECISIONS.md) | why the study holds up, and where it does not |
+| [`docs/cleaning_log.md`](docs/cleaning_log.md) | every exclusion, derivation and alignment, with its reason |
+| [`docs/data_dictionary.md`](docs/data_dictionary.md) | the 55 columns of the analysis panel |
+| [`sql/verification.sql`](sql/verification.sql) | integrity, reconciliation and coverage checks, each with its committed result |
+| [`sql/liquidity_overlay.sql`](sql/liquidity_overlay.sql) | the query behind the figure |
+| [`tests/`](tests/) | seven checks against the committed snapshot, no cloud |
+
+## What went wrong, and what came out of it
+
+**Gold, four dead ends.** Gold was meant to be the second barometer. FRED
+discontinued the LBMA series after a licensing change; stooq's CSV endpoint
+answers with a bot challenge; Nasdaq Data Link is blocked by a WAF from the
+build environment; the free Quandl dataset is now paid. Rather than force a
+substitute, gold was dropped and M2 was promoted to a plotted series, which is a
+better barometer for the question anyway. The four failures are recorded in
+`DECISIONS.md` section 5.1.
+
+**The loan figure changes basis at CECL.** There is no universal "total loans"
+tag. Before 2020 the panel lands on a net-of-allowance tag; after, on a gross
+tag. Three filers (JPMorgan among them) populate the concepts with inverted
+values. `total_loans` is therefore not comparable across 2020 and is not used
+in the finding; the break is documented instead of smoothed.
+
+**0.54% of rows do not reconcile.** `interest income - interest expense = NII`
+holds for 99.46% of testable rows. The rest is filers using slightly different
+income-tag bases. It is labelled, not fixed.
+
+**FY2025 is unverified.** The six most recent quarters rely on the filed XBRL
+alone. They are flagged in the data, shaded in the figure, and excluded from the
+inference window (2018-Q1 to 2024-Q2, 26 quarters).
+
+## Run it without the cloud
+
+```bash
+# Python 3.12 or newer
+pip install -r requirements.txt
+pytest                                                   # 7 tests, seconds, no credentials
+python analysis/liquidity_overlay.py --csv analysis/liquidity_overlay_data.csv --out /tmp/overlay.png
+streamlit run app/streamlit_app.py                       # the report, on localhost
+```
+
+The tests pin what would be expensive to get wrong: 72 quarters with no gaps,
+no imputed NII or M2, bitcoin null before 2014-Q4, the thin-coverage window, the
+six unverified quarters, and that the figure regenerates from the committed CSV.
+One of them was proved to go red by imputing zeros into bitcoin's early quarters.
+
+## Rebuilding the panel
+
+Only if you want to rebuild from source. You need a GCP project with BigQuery, a
+free FRED API key and a descriptive User-Agent for SEC EDGAR; see
+[`.env.example`](.env.example). A 200 GB per-query cap was enforced on every
+query during the build and is set in `analysis/liquidity_overlay.py`.
+
+## What this is not
+
+- **Not a causal study.** Causal language is reserved for rates to NII, the one
+  channel with a documented mechanism (Borio, Gambacorta and Hofmann, 2017).
+  Bitcoin is a barometer of the same weather, not the cause of it.
+- **Not a long time series.** 72 quarters, 26 in the inference window. The
+  cross-section is wide; the time dimension is thin. Suggestive, not settled.
+- **Not a professional's verdict.** The author is an enthusiast of these topics,
+  not a finance professional, and the conclusions are an analyst's exploration.
+- **Not a live service.** The Cloud Run deployment was retired in September 2026.
+
+## Data and sources
+
+SEC EDGAR companyfacts API (10-Q/10-K XBRL, public). FRED (Federal Reserve Bank
+of St. Louis, public). ETF holdings from the issuers' published constituent
+lists. No personal data anywhere in the pipeline.
+
+## Built with
+
+Python, BigQuery, pandas, matplotlib, Streamlit. Built with the Claude Code CLI
+in a pull-request workflow; the git history is the audit trail.

@@ -1,0 +1,25 @@
+# nothing with a key or a credential
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+credentials*.json
+*service_account*.json
+.bigqueryrc
+
+# os, editors, agents
+.DS_Store
+.vscode/
+.idea/
+.claude/
+
+# python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# raw data never goes in; the 72-quarter snapshot in analysis/ is the exception
+*.parquet
+data/

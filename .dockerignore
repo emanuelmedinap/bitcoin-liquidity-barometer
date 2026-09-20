@@ -9,7 +9,6 @@
 docs/
 sql/
 analysis/liquidity_overlay.py
-CLAUDE.md
 DECISIONS.md
 README.md
 LICENSE

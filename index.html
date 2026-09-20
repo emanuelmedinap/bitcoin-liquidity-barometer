@@ -91,7 +91,7 @@
 <div class="wrap">
 
   <header>
-    <p class="wordmark">NYU<span class="sep">|</span>Stern</p>
+    <p class="wordmark">NYU Stern</p>
     <p class="kicker">MSBAi · Assignment 2 · US public banks &amp; the flood of money</p>
     <h1>System liquidity vs. bank Net Interest Income</h1>
     <p class="northstar">Does system liquidity — the money supply, policy rates, and the
@@ -101,7 +101,6 @@
       XBRL) joined to FRED liquidity series (M2, fed funds, yield slope) and bitcoin;
       modeled in growth/changes rather than levels, with a temporal split and no imputation.</p>
     <p class="byline"><span class="name">Emanuel Medina Pinzón</span><br>
-      em5844@stern.nyu.edu<br>
       Manhattan · Friday, July 3, 2026 · 9:49 PM</p>
   </header>
 
@@ -213,11 +212,11 @@
         models in changes, not levels.</span></li>
     </ul>
     <div class="links">
-      <a href="https://github.com/emanuelmedinap/msbai-dwd-a2-em5844/blob/main/DECISIONS.md">
+      <a href="https://github.com/emanuelmedinap/bitcoin-liquidity-barometer/blob/main/DECISIONS.md">
         <div class="t">DECISIONS.md →</div>
         <div class="d">Plain-business-terms defense of the data, method, and caveats (§5.2 figure, §6 skepticism).</div>
       </a>
-      <a href="https://github.com/emanuelmedinap/msbai-dwd-a2-em5844">
+      <a href="https://github.com/emanuelmedinap/bitcoin-liquidity-barometer">
         <div class="t">Repository →</div>
         <div class="d">Source, SQL (<code>sql/liquidity_overlay.sql</code>), generator, and committed data snapshot.</div>
       </a>
@@ -233,8 +232,7 @@
   </section>
 
   <footer>
-    Static report served on Cloud Run (<a href="https://liquidity-report-272987333238.us-central1.run.app">liquidity-report-272987333238.us-central1.run.app</a>)
-    — no external calls; the only loaded asset is the local figure
+    Static report, self-contained — no external calls; the only loaded asset is the local figure
     <code>analysis/liquidity_overlay.png</code>. All labels and numbers reconcile to
     <code>analysis/liquidity_overlay_data.csv</code> (72-quarter snapshot committed alongside the
     figure). Sources: SEC EDGAR XBRL · FRED (M2SL, CBBTCUSD) · project BigQuery datasets
