@@ -16,8 +16,9 @@ than substitute.
 the 2022-23 drain, M2 and bank net interest income moved in opposite directions,
 and both trace to the policy rate. The one causal channel with a mechanism is
 rates, not money supply. Bitcoin did behave as a barometer: it followed M2's
-direction with amplified magnitude in both episodes (about -65% against M2's
--4.6% in the 2022 drain). Co-movement, never causation.
+direction with amplified magnitude in both episodes: in the 2022 drain, about
+-65% against M2's -4.6% as stated in the delivered report; peak to trough on the
+committed snapshot, -67.7% against -4.5%. Co-movement, never causation.
 
 **Built by** Emanuel Medina Pinzon, individual coursework for *Dealing With Data*
 (Prof. Panos Ipeirotis), NYU Stern MSBAi, July 2026.
@@ -66,6 +67,7 @@ analysis/liquidity_overlay.py         the figure, from BigQuery or from the CSV
 | [`sql/verification.sql`](sql/verification.sql) | integrity, reconciliation and coverage checks, each with its committed result |
 | [`sql/liquidity_overlay.sql`](sql/liquidity_overlay.sql) | the query behind the figure |
 | [`tests/`](tests/) | seven checks against the committed snapshot, no cloud |
+| [`LICENSES.md`](LICENSES.md) | every source, its terms, and the date they were read, including the Coinbase caveat |
 
 ## What went wrong, and what came out of it
 
@@ -128,7 +130,8 @@ query during the build and is set in `analysis/liquidity_overlay.py`.
 
 SEC EDGAR companyfacts API (10-Q/10-K XBRL, public). FRED (Federal Reserve Bank
 of St. Louis, public). ETF holdings from the issuers' published constituent
-lists. No personal data anywhere in the pipeline.
+lists. No personal data anywhere in the pipeline. Terms of every source, with
+one caveat on the bitcoin series, in [`LICENSES.md`](LICENSES.md).
 
 ## Built with
 
